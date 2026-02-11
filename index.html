@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+      body{
+    font-family: Arial;
+    background: linear-gradient(to right,#67c6c0,#5a8dee);
+    padding:20px;
+}
+
+/* Title */
+h1{
+    text-align:center;
+    color:white;
+}
+h3{
+    color: #67c6c0;
+}
+
+/* Main layout */
+body > div{
+    max-width:1000px;
+    margin:auto;
+}
+
+/* Two column layout */
+#container1, #continer2{
+    background:white;
+    padding:15px;
+    border-radius:10px;
+    margin:10px;
+    width:45%;
+    display:inline-block;
+    vertical-align:top;
+}
+
+/* Inputs */
+form input, form select, form textarea{
+    width:90%;
+    padding:8px;
+    margin:5px 0 10px;
+    border-radius:5px;
+    border:1px solid #ccc;
+}
+
+/* Buttons */
+button{
+    padding:8px 12px;
+    border:none;
+    border-radius:5px;
+    cursor:pointer;
+    background:#5a8dee;
+    color:white;
+}
+
+button:hover{
+    opacity:0.9;
+}
+
+/* Event cards */
+#eventcontainer div{
+    background:#f2f2f2;
+    padding:10px;
+    margin-top:10px;
+    border-radius:8px;
+    position:relative;
+}
+
+.deleteBtn{
+    background:red;
+    position:absolute;
+    right:10px;
+    top:10px;
+}
+    </style>
+</head>
+<body>
+    <h1>Smart Event Dashboard</h1>
+    
+    <div id="container1">
+        <h3>Add New Event</h3>
+    <form>
+        <label for="eventTitle">Event</label>
+        <input type="text" name="" id="eventTitle">
+
+        <label for="eventDate">Event Date</label>
+        <input type="date" name="" id="eventDate">
+
+        <label for="eventcategory">Category:</label>
+        <select name="" id="eventcategory">
+           <option value="Conference">Conference</option>
+           <option value="Webinar">Webinar</option>
+           <option value="Meetup">Meetup</option>
+           <option value="Workshop">Workshop</option>
+           <option value="Social">Social</option>
+           </select>
+            
+        <label for="Description">Description</label>
+        <textarea name="" id="Description"></textarea>
+        <button type="submit">Add Event </button>
+    </form>
+    </div>
+    <div id="continer2">
+        <h3>My Events</h3>
+        <div>
+            <button id="clear-btn">Clear All Events</button>
+            <button id="add-sample-btn">Add sample events</button>
+        </div>
+         <div>
+            <div id="eventcontainer">
+             <h4>No events yet</h4>
+            </div>
+        </div>
+        <div class="main">
+    <div id="container1">...</div>
+    <div id="continer2">...</div>
+    </div>
+    <script>
+        let form = document.querySelector('form')
+
+let eventTitle= document.querySelector('#eventTitle')
+let eventDate = document.querySelector('#eventDate')
+let eventcategory = document.querySelector('#eventcategory')
+let Description = document.querySelector('#Description')
+
+let eventcontainer = document.querySelector('#eventcontainer')
+
+let clearBtn = document.querySelector('#clear-btn')
+let sampleBtn = document.querySelector('#add-sample-btn')
+
+let isEmpty = true;
+
+
+// ADD EVENT FUNCTION
+function addeventfunction(e){
+    e.preventDefault();
+
+    if(eventTitle.value=="" || eventDate.value==""){
+        alert("Please fill title and date")
+        return;
+    }
+
+    createCard(
+        eventTitle.value,
+        eventDate.value,
+        eventcategory.value,
+        Description.value
+    )
+
+    form.reset()
+}
+
+form.addEventListener('submit',addeventfunction)
+
+
+// CREATE CARD
+function createCard(title,date,category,desc){
+
+    if(isEmpty){
+        eventcontainer.innerHTML=""
+        isEmpty=false
+    }
+
+    let card = document.createElement('div')
+
+    card.innerHTML=`
+        <button class="deleteBtn">X</button>
+        <h4>${title}</h4>
+        <span>${date}</span><br>
+        <span>${category}</span>
+        <p>${desc}</p>
+    `
+
+    // delete button
+    card.querySelector('.deleteBtn').onclick=()=>{
+        card.remove()
+
+        if(eventcontainer.children.length==0){
+            eventcontainer.innerHTML="<h4>No events yet</h4>"
+            isEmpty=true
+        }
+    }
+
+    eventcontainer.append(card)
+}
+
+
+// CLEAR ALL EVENTS
+clearBtn.addEventListener('click',()=>{
+    eventcontainer.innerHTML="<h4>No events yet</h4>"
+    isEmpty=true
+})
+
+
+// SAMPLE EVENTS
+sampleBtn.addEventListener('click',()=>{
+    createCard(
+        "Web Dev Conference",
+        "2026-02-15",
+        "Conference",
+        "Annual tech conference"
+    )
+
+    createCard(
+        "JavaScript Workshop",
+        "2026-02-20",
+        "Workshop",
+        "Learn JS basics"
+    )
+})
+    </script>
+</body>
+</html>
